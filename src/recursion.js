@@ -86,8 +86,55 @@ if (sign === undefined) {
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+if (x === y || x - 1 === y || x + 1 === y) { // edge case
+	return [];
+}
 
+var isArray = Array.isArray(x);
 
+if (!isArray) {
+	var isReverse;
+	if (x > y) {
+		isReverse = true;
+	} else {
+		isReverse = false;
+	}
+} else {
+	var isReverse;
+	if (x[0] > x[1]) {
+		isReverse = true;
+	} else {
+		isReverse = false;
+	}
+}
+
+if (!isReverse) {
+	if (x[x.length - 1] + 1 >= y) {
+		return x;
+	}
+} else {
+	if (x[x.length - 1] - 1 <= y) {
+		return x;
+	}
+}
+
+	if (!isArray) {
+		if (!isReverse) {
+			var val = x + 1;
+		} else {
+			var val = x - 1;
+		}
+			x = [val];
+			console.log(x);
+	}
+
+	if (!isReverse) {
+		x.push(x[x.length - 1] + 1);
+	} else {
+		x.push(x[x.length - 1] - 1);
+	}
+
+	return range(x, y);
 };
 
 // 7. Compute the exponent of a number.
@@ -121,10 +168,27 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+	if (n === 1) {
+		return true;
+	}
+
+	var result = n / 2;
+
+	if (result === 1) {
+		return true;
+	}
+
+	if (result < 2) {
+		return false;
+	}
+
+	return powerOfTwo(result);
 };
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+
+	return reverse(string);
 };
 
 // 10. Write a function that determines if a string is a palindrome.
