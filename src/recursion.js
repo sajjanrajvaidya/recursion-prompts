@@ -86,53 +86,53 @@ if (sign === undefined) {
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
-if (x === y || x - 1 === y || x + 1 === y) { // edge case
-	return [];
-}
+	if (x === y || x - 1 === y || x + 1 === y) { // edge case
+		return [];
+	}
 
-var isArray = Array.isArray(x);
-
-if (!isArray) {
-	var isReverse;
-	if (x > y) {
-		isReverse = true;
-	} else {
-		isReverse = false;
-	}
-} else {
-	var isReverse;
-	if (x[0] > x[1]) {
-		isReverse = true;
-	} else {
-		isReverse = false;
-	}
-}
-
-if (!isReverse) {
-	if (x[x.length - 1] + 1 >= y) {
-		return x;
-	}
-} else {
-	if (x[x.length - 1] - 1 <= y) {
-		return x;
-	}
-}
+	var isArray = Array.isArray(x);
 
 	if (!isArray) {
-		if (!isReverse) {
-			var val = x + 1;
+		var isReverse;
+		if (x > y) {
+			isReverse = true;
 		} else {
-			var val = x - 1;
+			isReverse = false;
 		}
-			x = [val];
-			console.log(x);
+	} else {
+		var isReverse;
+		if (x[0] > x[1]) {
+			isReverse = true;
+		} else {
+			isReverse = false;
+		}
 	}
 
 	if (!isReverse) {
-		x.push(x[x.length - 1] + 1);
+		if (x[x.length - 1] + 1 >= y) {
+			return x;
+		}
 	} else {
-		x.push(x[x.length - 1] - 1);
+		if (x[x.length - 1] - 1 <= y) {
+			return x;
+		}
 	}
+
+		if (!isArray) {
+			if (!isReverse) {
+				var val = x + 1;
+			} else {
+				var val = x - 1;
+			}
+				x = [val];
+				console.log(x);
+		}
+
+		if (!isReverse) {
+			x.push(x[x.length - 1] + 1);
+		} else {
+			x.push(x[x.length - 1] - 1);
+		}
 
 	return range(x, y);
 };
@@ -187,12 +187,35 @@ var powerOfTwo = function(n) {
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
-
-	return reverse(string);
+	// create a result string
+	var result = '';
+	var lastIndex = string.length - 1;
+	// add the last character to result strig
+	if (string.length === 0) { // base case
+		return string
+	}
+	result += string[lastIndex];
+	// return the result string + string sliced to before the last character
+	return result + reverse(string.slice(0, lastIndex));
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+	var lower = string.toLowerCase();
+	string = lower;
+	// return value is a boolean
+	if (string.length === 0) { // base case
+		return true;
+	}
+
+	var first = string[0];
+	var last = string[string.length - 1];
+	var isEqual = first === last;
+	var newString = string.slice(1, string.length - 1);
+	return isEqual && palindrome(newString);
+
+	// take what's given and check if it is a palidrome
+	// recurse passing string without first and last character
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -201,11 +224,73 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+	if (y < 0) {
+		y = -y;
+	}
+	
+	if (y === 0) {
+		return NaN;
+	}
+
+	if (x < y) {
+		if (x >= 0) {
+			return x;
+		} else {
+			var isNegative = true;
+			x = -x;
+			if (x < y) {
+				return -x;
+			}
+		}
+	}
+
+	if (isNegative) {
+		return -(modulo(x - y, y));
+	} else {
+		return modulo(x - y, y);
+	}
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
 var multiply = function(x, y) {
+	if (x === 0 || y === 0) {
+		return 0;
+	}
+	var isNegativeX;
+	var isNegativeY;
+	if (x < 0) {
+		isNegativeX = true;
+		x = -(x);
+	} else {
+		isNegativeX = false;
+	}
+
+	if (y < 0) {
+		isNegativeY = true;
+		y = -(y); 
+	} else {
+		isNegativeY = false;
+	}
+
+	if (y === 1) {
+		return x;
+	}
+
+	var isNegative = false;
+
+	if (isNegativeX && isNegativeY) {
+		isNegative = false;
+
+	} else if (isNegativeX || isNegativeY) {
+		isNegative = true;
+	}
+
+	if (!isNegative) {
+		return x + multiply(x, y - 1);
+	} else {
+		return -(x + multiply(x, y - 1));
+	}
 };
 
 // 13. Write a function that divides two numbers without using the / operator or
@@ -226,11 +311,52 @@ var gcd = function(x, y) {
 // compareStr('house', 'houses') // false
 // compareStr('tomato', 'tomato') // true
 var compareStr = function(str1, str2) {
+	if (str1.length > str2.length) { // to make sure str1 is always shorter. Thus, reaching at '' quicker
+		var a = str1;
+		var b = str2;
+		str1 = b;
+		str2 = a;
+	}
+
+	if (str1 === '') {
+		if (str2 === '') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	str1 = str1.slice(0, str1.length - 1);
+	str2 = str2.slice(0, str2.length - 1);
+	return compareStr(str1, str2);
+
 };
 
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
 var createArray = function(str) {
+	if (Array.isArray(str)) {
+		if (str[0].length === 1) {
+			return str;
+		} else {
+			if (str[0].length > 1) {
+			var el = str[0];
+			var char = el[el.length - 1];
+			str.splice(1, 0, char);
+			str[0] = el.slice(0, el.length - 1);
+		}
+	}
+	} else {
+		if (str.length === 1) {
+			return [str];
+		}
+		result = [];
+		var char = str[str.length - 1];
+		result.push(char);
+		str = str.slice(0, str.length - 1);
+		result.unshift(str);
+	}
+	return createArray(result);
 };
 
 // 17. Reverse the order of an array
