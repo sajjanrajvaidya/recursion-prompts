@@ -125,7 +125,6 @@ var range = function(x, y) {
 				var val = x - 1;
 			}
 				x = [val];
-				console.log(x);
 		}
 
 		if (!isReverse) {
@@ -475,7 +474,6 @@ var fizzBuzz = function(n) {
 	}
 	result.push(pushVal);
 	n--;
-	console.log(result);
 	// in the return line of the recursion, concatenated to the array
 	return [...fizzBuzz(n), ...result];
 };
@@ -484,11 +482,33 @@ var fizzBuzz = function(n) {
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function(array, value) {
+	if (array.length === 1 && array[0] === value) {
+		return 1;
+	} else if (array.length === 1) {
+		return 0;
+	}
+
+	var count = 0;
+	var popped = array.pop();
+
+	if (popped === value) {
+		count++;
+	}
+
+	return count + countOccurrence(array, value);
 };
 
 // 21. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function(array, callback) {
+	if (Array.isArray(array)) {
+		var result = [];
+	} else {
+		return callback(array);
+	}
+
+	array.forEach(el => result.push(rMap(el, callback)));
+	return result;
 };
 
 // 22. Write a function that counts the number of times a key occurs in an object.
