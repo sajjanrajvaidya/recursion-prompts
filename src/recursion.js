@@ -296,14 +296,71 @@ var multiply = function(x, y) {
 // 13. Write a function that divides two numbers without using the / operator or
 // Math methods to arrive at an approximate quotient (ignore decimal endings).
 var divide = function(x, y) {
-};
+		if (x < 0 && y < 0) {
+		x = -(x);
+		y = -(y);
+	}
+
+	if (y === 0) {
+		return NaN;
+	}
+
+	if (y > x) {
+		return 0;
+
+	
+		
+	}
+  if (typeof(y) !== 'object') {
+  	var object = {'divisor': y};
+  	y = object;
+  	y.quotient = 0;
+  }
+
+    if (x >= y.divisor) {
+          y.quotient++;
+          var remainder = x - y.divisor;
+
+    }
+
+    if (remainder >= 0 && remainder < y.divisor) {
+    	return y.quotient;
+    }
+
+    x = remainder;
+    return divide(x, y);
+  };
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers. The GCD of two
 // integers is the greatest integer that divides both x and y with no remainder.
 // gcd(4,36); // 4
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
-var gcd = function(x, y) {
+var gcd = function(x, y) { // The Euclidean Algorithm
+	
+	if (x <= 0 || y <=  0) {
+		return null;
+	}
+
+	//swap so the first number is greater
+	if (y > x) {
+		var swap = x;
+		x = y;
+		y = swap;
+	}
+
+	if (x % y === 0) {
+		return y;
+	}
+
+	// Apply the Euclidean Algorithm
+	var r = x % y;
+	// var q = Math.round(x/y);
+
+	x = y;
+	y = r;
+
+	return gcd(x, y);
 };
 
 // 15. Write a function that compares each character of two strings and returns true if
@@ -361,12 +418,35 @@ var createArray = function(str) {
 
 // 17. Reverse the order of an array
 var reverseArr = function(array) {
+	// debugger;
+	var result = [];
+	if (array.length === 1) {
+		return array[0];
+	}
+	result.push(array.pop());
+	return result.concat(reverseArr(array));
 };
 
 // 18. Create a new array with a given value and length.
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
 var buildList = function(value, length) {
+  var result = [];
+  if (length === 1 && value === undefined) {
+		return [undefined];
+	}
+
+  if (length === 1 && Array.isArray(value) && value.length === 0 ) {
+    return [[]];
+  }
+
+	if (length === 1) {
+		return value;
+	}
+  
+	result.push(value);
+	length --;
+	return result.concat(buildList(value, length));
 };
 
 // 19. Implement FizzBuzz. Given integer n, return an array of the string representations of 1 to n.
